@@ -58,9 +58,16 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     tf.Print(conv_1x1,[tf.shape(conv_1x1)])
     output = tf.layers.conv2d_transpose(conv_1x1, num_classes, 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     tf.Print(output,[tf.shape(output)])
-    output = tf.layers.conv2d_transpose(conv_1x1, num_classes, 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+
+    layer4_conv_1x1 = tf.layers.conv2d(vgg_layer4_out,num_classes,1,padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    output4=tf.add(output,layer4_conv_1x1)
+
+    output4 = tf.layers.conv2d_transpose(output4, num_classes, 4, 2, padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    
+    layer3_conv_1x1 = tf.layers.conv2d(vgg_layer3_out,num_classes,1,padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    output3=tf.add(output4,layer3_conv_1x1)
     #output = tf.add(output, vgg_layer3_out)
-    final_layer = tf.layers.conv2d_transpose(output, num_classes, 16, strides=(8,8), padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
+    final_layer = tf.layers.conv2d_transpose(output3, num_classes, 16, strides=(8,8), padding='same',kernel_regularizer=tf.contrib.layers.l2_regularizer(1e-3))
     tf.Print(output,[tf.shape(output)])
     return final_layer
 tests.test_layers(layers)
@@ -114,7 +121,8 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     	for image, label in get_batches_fn(batch_size):
     		_, loss = sess.run([train_op, cross_entropy_loss],
     			feed_dict={input_image: image, correct_label: label, learning_rate: 0.001, keep_prob: 0.5 })
-
+    		print("Loss: = {:.3f}".format(loss))
+    	print()
     pass
 tests.test_train_nn(train_nn)
 
@@ -141,7 +149,7 @@ def run():
 
         # OPTIONAL: Augment Images for better results
         #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
-        n_epochs=2
+        n_epochs=30
         batch_size=10
         correct_label=tf.placeholder(tf.int32,[None,None,None, num_classes],name='correct_label')
         learning_rate=tf.placeholder(tf.float32,name='learning_rate')
@@ -153,7 +161,7 @@ def run():
         train_nn(sess, n_epochs, batch_size, get_batches_fn, training_operation, cross_entropy_loss, input_image,
              correct_label, keep_prob, learning_rate)
         # TODO: Save inference data using helper.save_inference_samples
-        #  helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
+        helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
 
         # OPTIONAL: Apply the trained model to a video
 
