@@ -5,6 +5,7 @@ This project represents semantic segmentation, i.e. labeling all the pixels of r
 ### Results
 By completing the model and training with GPU I managed to obtain an accuracy of 92%. Example images are shown here. 
 
+![Alt text](data/examples/uu_000026.png?raw=true "Title")
 
 
 ### Setup
