@@ -1,6 +1,12 @@
 # Semantic Segmentation
 ### Introduction
-In this project, you'll label the pixels of a road in images using a Fully Convolutional Network (FCN).
+This project represents semantic segmentation, i.e. labeling all the pixels of road images to different classes using a Fully Convolutional Network (FCN). An FCN model takes as input training images and as output full corresponding images where all the pixels have been labelled. The model then learns to classify all pixels of test images. The models uses transfer learning by loading a pre-trained VGG16 model trained on the Imagenet. The convolutional layers of the model are kept frozen in order to use the previously learned feature extraction. The dense layers not kept, but are changed to 1x1 convolutions. This is followed by three upsampling layers to upsample the features back to the size of the original images. In order to improve the classification model,skip layers are added to use multiple scales of the image. The main purpose of such images is understanding the full scene that cameras of a self-driving car see. For example, by labeling the road free of obstacles enables the determination of where there is free space for the car to move. 
+
+### Results
+By completing the model and training with GPU I managed to obtain an accuracy of 92%. Example images are shown here. 
+
+![Alt text](data\examples\uu_000026.png?raw=true "Title")
+
 
 ### Setup
 ##### Frameworks and Packages
