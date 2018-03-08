@@ -7,7 +7,11 @@ By completing the model and training with GPU I managed to obtain an accuracy of
 
 ![Alt text](data/examples/uu_000026.png?raw=true "Title")
 
+![Alt text](data/examples/ummm_000008.png?raw=true "Title")
 
+![Alt text](data/examples/uu_000049.png?raw=true "Title")
+
+![Alt text](data/examples/uu_000063.png?raw=true "Title")
 ### Setup
 ##### Frameworks and Packages
 Make sure you have the following is installed:
